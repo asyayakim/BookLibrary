@@ -24,7 +24,16 @@ namespace BookLibrary.Database
 
         public async Task AddAsync(Book book)
         {
-            await _context.Book.AddAsync(book);
+            // await _context.Book.AddAsync(book);
+            // await _context.SaveChangesAsync();
+            var existingBook = await _context.Book.FirstOrDefaultAsync(b => b.Isbn == book.Isbn);
+            if (existingBook != null)
+            {
+                Console.WriteLine($"Skipping duplicate book: {book.Title}, ISBN: {book.Isbn}");
+                return;
+            }
+
+            _context.Book.Add(book);
             await _context.SaveChangesAsync();
         }
 

@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<GoogleBooksService>();
 
 builder.Services.AddDbContext<BookDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

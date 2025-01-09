@@ -9,10 +9,32 @@ namespace BookLibrary.Api.Controllers
     public class BookController : ControllerBase
     {
         private readonly BookService _bookService;
+        private readonly GoogleBooksService _googleBooksService;
 
-        public BookController(BookService bookService)
+        public BookController(BookService bookService, GoogleBooksService googleBooksService)
         {
             _bookService = bookService;
+            _googleBooksService = googleBooksService;
+        }
+        [HttpGet("fetch-google-books")]
+        public async Task<IActionResult> FetchGoogleBooks()
+        {
+            try
+            {
+                var books = await _googleBooksService.GetFictionBooksAsync();
+
+                foreach (var book in books)
+                {
+                    Console.WriteLine($"Saving book to database: {book.Title}, ISBN: {book.Isbn}");
+                    await _bookService.AddBookAsync(book);
+                }
+
+                return Ok(new { Message = $"{books.Count} books fetched and saved to the database!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error: {ex.Message}");
+            }
         }
 
         // GET: api/Customer
