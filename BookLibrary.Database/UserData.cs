@@ -4,11 +4,13 @@ namespace BookLibrary.Database;
 
 public class UserData
 {
+    [Key]
+    public int Id { get; set; }
     [Required]
     [MaxLength(20)]
-    public string UserName { get; set; }
+    public required string UserName { get; set; }
     [Required]
     [MaxLength(50)]  
-    public string Password { get; set; } 
+    public required string Password { get; set; } 
     
 }

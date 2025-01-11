@@ -14,8 +14,8 @@ public class LoginController : ControllerBase
     {
         _loginService = loginService;
     }
-
-    public async Task<ActionResult<IEnumerable<UserData>>> GetUserData()
+    [HttpGet]
+    public async Task<ActionResult<UserData>> GetUserData()
            {
                try
                {
@@ -49,7 +49,7 @@ public class LoginController : ControllerBase
                try
                {
                    await _loginService.AddUserDataAsync(userData);
-                   return CreatedAtAction(nameof(GetUserData), new { id = userData.Id }, userData);
+                   return CreatedAtAction(nameof(GetUserData), new { id = userData.UserName }, userData);
                }
                catch (Exception ex)
                {
