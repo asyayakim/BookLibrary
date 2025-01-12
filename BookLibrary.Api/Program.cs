@@ -20,8 +20,8 @@ var connStringUserName = "Host=localhost;Port=5432;Database=userdata_db;Username
 
 builder.Services.AddScoped<BookRepository>();
 builder.Services.AddScoped<BookService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<LoginRepository>();
-builder.Services.AddScoped<LoginService>();
 try
 {
     using (var conn = new NpgsqlConnection(connString))

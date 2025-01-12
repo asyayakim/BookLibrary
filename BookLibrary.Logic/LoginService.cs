@@ -2,7 +2,7 @@ using BookLibrary.Database;
 
 namespace BookLibrary.Logic;
 
-public class LoginService
+public class LoginService : ILoginService
 {
     private readonly LoginRepository _loginRepository;
 
