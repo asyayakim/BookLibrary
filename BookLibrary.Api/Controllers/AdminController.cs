@@ -57,7 +57,7 @@ public class AdminController : ControllerBase
         }
     }
 
-    // Delete a book
+    // Delete a user
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUserData(int id)
     {

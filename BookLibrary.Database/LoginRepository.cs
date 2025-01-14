@@ -42,5 +42,11 @@ public class LoginRepository
             _context.UserData.Remove(userData);
             await _context.SaveChangesAsync();
         }
-    } 
+    }
+
+    public UserData GetUsersByData(string requestUserName, string requestPassword)
+    {
+        return _context.UserData.FirstOrDefault(b => b.UserName == requestUserName &&
+                                                     b.Password == requestPassword)!;
+    }
 }

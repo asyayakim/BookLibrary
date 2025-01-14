@@ -45,14 +45,25 @@ catch (Exception ex)
 {
     Console.WriteLine($"An error occurred: {ex.Message}");
 }
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:8080") 
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 var app = builder.Build();
+
+
 if (app.Environment.IsDevelopment())
 {
     Console.WriteLine("Development environment detected.");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

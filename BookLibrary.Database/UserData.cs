@@ -11,6 +11,8 @@ public class UserData
     public required string UserName { get; set; }
     [Required]
     [MaxLength(50)]  
-    public required string Password { get; set; } 
-    
+    public required string Password { get; set; }
+
+    [MaxLength(6)] public string Role { get; set; } = "User";
+
 }

@@ -29,5 +29,10 @@ public class LoginService : ILoginService
     public async Task DeleteUserDataAsync(int id)
     {
         await _loginRepository.DeleteAsync(id);
-    } 
+    }
+
+    public UserData GetUsersDataAsync(string requestUserName, string requestPassword)
+    {
+        return _loginRepository.GetUsersByData(requestUserName, requestPassword);
+    }
 }
