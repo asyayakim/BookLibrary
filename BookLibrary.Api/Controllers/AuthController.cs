@@ -33,7 +33,6 @@ public class AuthController : ControllerBase
                 {
                     Id = user.Id,
                     UserName = user.UserName,
-                    Password = user.Password,
                     Role = user.Role
                 }
             });

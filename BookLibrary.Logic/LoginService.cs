@@ -1,4 +1,5 @@
 using BookLibrary.Database;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Logic;
 
@@ -34,5 +35,18 @@ public class LoginService : ILoginService
     public UserData GetUsersDataAsync(string requestUserName, string requestPassword)
     {
         return _loginRepository.GetUsersByData(requestUserName, requestPassword);
+    }
+
+    public async Task<UserData> AddUserDataAsync(string requestUserName, string requestPassword)
+    {
+        var userData = new UserData
+        {
+            UserName = requestUserName,
+            Password = requestPassword,
+            Role = "User"
+        };
+
+        await _loginRepository.AddAsync(userData);
+        return userData;
     }
 }

@@ -26,8 +26,7 @@ public class LoginRepository
         var existingUser = await _context.UserData.FirstOrDefaultAsync(b => b.UserName == userData.UserName);
         if (existingUser != null)
         {
-            Console.WriteLine($"Skipping duplicate book: {userData.UserName}");
-            return;
+            throw new InvalidOperationException($"User with username '{userData.UserName}' already exists.");
         }
 
         _context.UserData.Add(userData);
