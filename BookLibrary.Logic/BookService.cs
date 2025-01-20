@@ -2,7 +2,7 @@ using BookLibrary.Database;
 
 namespace BookLibrary.Logic;
 
-public class BookService
+public class BookService 
 {
     private readonly BookRepository _bookRepository;
 
@@ -29,5 +29,10 @@ public class BookService
     public async Task DeleteBookAsync(int id)
     {
         await _bookRepository.DeleteAsync(id);
+    }
+
+    public async Task AddLoanedBookAsync(int parse, LoanedBook loanedBook)
+    {
+        await _bookRepository.AddLoanedBookAsync(parse, loanedBook);
     }
 }

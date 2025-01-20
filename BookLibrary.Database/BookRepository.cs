@@ -24,8 +24,6 @@ namespace BookLibrary.Database
 
         public async Task AddAsync(Book book)
         {
-            // await _context.Book.AddAsync(book);
-            // await _context.SaveChangesAsync();
             var existingBook = await _context.Book.FirstOrDefaultAsync(b => b.Isbn == book.Isbn);
             if (existingBook != null)
             {
@@ -45,6 +43,13 @@ namespace BookLibrary.Database
                 _context.Book.Remove(book);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task AddLoanedBookAsync(int userId, LoanedBook loanedBook)
+        {
+            loanedBook.UserId = userId; 
+            _context.LoanedBook.Add(loanedBook); 
+            await _context.SaveChangesAsync();
         }
     }
 }

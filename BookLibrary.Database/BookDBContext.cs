@@ -11,5 +11,6 @@ public class BookDbContext : DbContext
     }
 
     public virtual DbSet<Book> Book { get; set; }
+    public virtual DbSet<LoanedBook> LoanedBook { get; set; }
     
 }

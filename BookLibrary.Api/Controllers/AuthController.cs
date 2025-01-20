@@ -28,7 +28,6 @@ public class AuthController : ControllerBase
 
             return Ok(new
             {
-                Token = "your-jwt-token",
                 User = new
                 {
                     Id = user.Id,
