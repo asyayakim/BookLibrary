@@ -35,4 +35,9 @@ public class BookService
     {
         await _bookRepository.AddLoanedBookAsync(parse, loanedBook);
     }
+
+    public async Task<IEnumerable<LoanedBook>>  GetLoanedBooksByUserAsync(int userId)
+    {
+       return await _bookRepository.GetLoanedBooksByUserAsync(userId);
+    }
 }

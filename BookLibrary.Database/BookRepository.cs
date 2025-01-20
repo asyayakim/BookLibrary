@@ -51,5 +51,10 @@ namespace BookLibrary.Database
             _context.LoanedBook.Add(loanedBook); 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<LoanedBook>> GetLoanedBooksByUserAsync(int userId)
+        {
+            return await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
+        }
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 
 namespace BookLibrary.Api.Controllers;
+
 [ApiController]
 [Route("api/books")]
 
@@ -18,6 +19,7 @@ public class LoanedBooksController : ControllerBase
     {
         _bookService = bookService;
     }
+
     [HttpPost("loan")]
     public async Task<IActionResult> LoanBook([FromBody] LoanedBook loanedBook)
     {
@@ -42,4 +44,35 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, new { Message = "Internal server error." });
         }
     }
-}
+    [HttpGet("loaned")]
+    public async Task<IActionResult> PrintLoanedBooks(int userId)
+    {
+        if (userId <= 0)
+        {
+            return BadRequest(new { Message = "Invalid user ID." });
+        }
+        try
+        {
+            var loanedBooks = await _bookService.GetLoanedBooksByUserAsync(userId); 
+            if (loanedBooks == null || !loanedBooks.Any())
+            {
+                return NotFound(new { Message = "No loaned books found for this user." });
+            }
+
+            var result = loanedBooks.Select(book => new
+            {
+                UserId = book.UserId,
+                Isbn = book.Isbn,
+                Title = book.Title,
+                LoanDate = book.LoanDate,
+            });
+            return Ok(result);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching loaned books: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
+    }
