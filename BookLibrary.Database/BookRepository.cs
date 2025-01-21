@@ -56,5 +56,12 @@ namespace BookLibrary.Database
         {
             return await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
         }
+
+        public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
+        {
+            favoriteBooks.UserId = favoriteBooksUserId;
+            _context.FavoriteBooks.Add(favoriteBooks);
+            await _context.SaveChangesAsync();
+        }
     }
 }

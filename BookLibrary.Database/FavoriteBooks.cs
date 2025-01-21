@@ -1,12 +1,11 @@
 namespace BookLibrary.Database;
 
-public class LoanedBook
+public class FavoriteBooks
 {
     public int Id { get; set; }
     public int UserId { get; set; }
     public string Isbn { get; set; }
     public string Title { get; set; }
-    public DateTime LoanDate { get; set; }
-    
     public string CoverImageUrl { get; set; }
+    
 }

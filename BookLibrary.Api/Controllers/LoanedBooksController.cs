@@ -61,6 +61,7 @@ public class LoanedBooksController : ControllerBase
 
             var result = loanedBooks.Select(book => new
             {
+                CoverImage = book.CoverImageUrl,
                 UserId = book.UserId,
                 Isbn = book.Isbn,
                 Title = book.Title,
@@ -73,6 +74,30 @@ public class LoanedBooksController : ControllerBase
         {
             Console.WriteLine($"Error fetching loaned books: {ex.Message}");
             return StatusCode(500, "Internal server error.");
+        }
+    }
+    [HttpPost("favorite")]
+    public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks favoriteBooks)
+    {
+        try
+        {
+            if (favoriteBooks.UserId <= 0)
+            {
+                return BadRequest(new { Message = "User ID is missing or invalid." });
+            }
+
+            if (string.IsNullOrEmpty(favoriteBooks.Isbn) || string.IsNullOrEmpty(favoriteBooks.Title))
+            {
+                return BadRequest(new { Message = "Missing required fields (ISBN or BookName)." });
+            }
+
+            await _bookService.AddFavoriteBookAsync(favoriteBooks.UserId, favoriteBooks);
+            return Ok(new { Message = "Book successfully loaned." });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during book loaning: {ex.Message}");
+            return StatusCode(500, new { Message = "Internal server error." });
         }
     }
     }

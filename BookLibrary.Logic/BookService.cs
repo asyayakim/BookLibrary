@@ -40,4 +40,9 @@ public class BookService
     {
        return await _bookRepository.GetLoanedBooksByUserAsync(userId);
     }
+
+    public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
+    {
+       await _bookRepository.AddFavoriteBookAsync(favoriteBooksUserId, favoriteBooks);
+    }
 }
