@@ -63,5 +63,17 @@ namespace BookLibrary.Database
             _context.FavoriteBooks.Add(favoriteBooks);
             await _context.SaveChangesAsync();
         }
+
+        public async Task RemoveBookIsbnAsync(LoanedBook loanedBook)
+        {
+            var book = await _context.LoanedBook.FirstOrDefaultAsync(b => b.Isbn == loanedBook.Isbn
+                                                                          && b.UserId == loanedBook.UserId);
+            if (book != null)
+            {
+                _context.LoanedBook.Remove(book);
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Loaned book successfully deleted.");
+            }
+        }
     }
 }

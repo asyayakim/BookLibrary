@@ -5,12 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
-
 namespace BookLibrary.Api.Controllers;
 
 [ApiController]
 [Route("api/books")]
-
 public class LoanedBooksController : ControllerBase
 {
     private readonly BookService _bookService;
@@ -44,6 +42,7 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, new { Message = "Internal server error." });
         }
     }
+
     [HttpGet("loaned")]
     public async Task<IActionResult> PrintLoanedBooks(int userId)
     {
@@ -51,9 +50,10 @@ public class LoanedBooksController : ControllerBase
         {
             return BadRequest(new { Message = "Invalid user ID." });
         }
+
         try
         {
-            var loanedBooks = await _bookService.GetLoanedBooksByUserAsync(userId); 
+            var loanedBooks = await _bookService.GetLoanedBooksByUserAsync(userId);
             if (loanedBooks == null || !loanedBooks.Any())
             {
                 return NotFound(new { Message = "No loaned books found for this user." });
@@ -76,6 +76,7 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+
     [HttpPost("favorite")]
     public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks favoriteBooks)
     {
@@ -100,4 +101,24 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, new { Message = "Internal server error." });
         }
     }
+
+    [HttpDelete("deleteBook")]
+    public async Task<IActionResult> RemoveLoanedBook([FromQuery] int userId, [FromQuery] string isbn)
+    {
+        try
+        {
+            if (userId <= 0)
+            {
+                return BadRequest(new { Message = "User ID is missing or invalid." });
+            } 
+            var loanedBook = new LoanedBook { UserId = userId, Isbn = isbn };
+            await _bookService.RemoveLoanedBookAsync(loanedBook);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting book: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
     }
+}

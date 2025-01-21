@@ -45,4 +45,9 @@ public class BookService
     {
        await _bookRepository.AddFavoriteBookAsync(favoriteBooksUserId, favoriteBooks);
     }
+
+    public async Task RemoveLoanedBookAsync(LoanedBook loanedBook)
+    {
+        await _bookRepository.RemoveBookIsbnAsync(loanedBook);
+    }
 }
