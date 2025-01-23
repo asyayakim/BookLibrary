@@ -61,7 +61,7 @@ public class LoanedBooksController : ControllerBase
 
             var result = loanedBooks.Select(book => new
             {
-                CoverImage = book.CoverImageUrl,
+                CoverImageUrl = book.CoverImageUrl,
                 UserId = book.UserId,
                 Isbn = book.Isbn,
                 Title = book.Title,
@@ -110,7 +110,8 @@ public class LoanedBooksController : ControllerBase
             if (userId <= 0)
             {
                 return BadRequest(new { Message = "User ID is missing or invalid." });
-            } 
+            }
+
             var loanedBook = new LoanedBook { UserId = userId, Isbn = isbn };
             await _bookService.RemoveLoanedBookAsync(loanedBook);
             return NoContent();
@@ -118,6 +119,35 @@ public class LoanedBooksController : ControllerBase
         catch (Exception ex)
         {
             Console.WriteLine($"Error deleting book: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
+
+    [HttpGet("usersData")]
+    public async Task<IActionResult> GetUserData()
+    {
+        try
+        {
+            var userDataLoanedBooks = await _bookService.GetAllUserData();
+            if (userDataLoanedBooks == null || !userDataLoanedBooks.Any())
+            {
+                return NotFound(new { Message = "No loaned books found for this user." });
+            }
+
+            var result = userDataLoanedBooks.Select(book => new
+            {
+                CoverImageUrl = book.CoverImageUrl,
+                UserId = book.UserId,
+                Isbn = book.Isbn,
+                Title = book.Title,
+                LoanDate = book.LoanDate,
+            });
+            return Ok(result);
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching loaned books: {ex.Message}");
             return StatusCode(500, "Internal server error.");
         }
     }

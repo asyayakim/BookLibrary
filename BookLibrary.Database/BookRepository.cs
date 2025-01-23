@@ -75,5 +75,11 @@ namespace BookLibrary.Database
                 Console.WriteLine("Loaned book successfully deleted.");
             }
         }
+
+        public async Task<IEnumerable<LoanedBook>> GetAllLoanedBooksByUserAsync()
+        {
+            return await _context.LoanedBook.ToListAsync();
+            
+        }
     }
 }

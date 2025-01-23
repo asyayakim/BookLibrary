@@ -50,4 +50,9 @@ public class BookService
     {
         await _bookRepository.RemoveBookIsbnAsync(loanedBook);
     }
+
+    public async Task<IEnumerable<LoanedBook>> GetAllUserData()
+    {
+        return await _bookRepository.GetAllLoanedBooksByUserAsync();
+    }
 }
