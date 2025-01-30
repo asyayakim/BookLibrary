@@ -12,6 +12,9 @@
 
     <ItemGroup>
       <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+      <PackageReference Include="HtmlAgilityPack" Version="1.11.72" />
+      <PackageReference Include="PuppeteerSharp" Version="20.0.5" />
+      <PackageReference Include="PuppeteerSharp.Contrib.Extensions" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

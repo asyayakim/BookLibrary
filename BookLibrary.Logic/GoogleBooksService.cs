@@ -15,14 +15,14 @@ public class GoogleBooksService
             _apiKey = configuration["GoogleBooks:ApiKey"] ?? throw new ArgumentNullException("GoogleBooks:ApiKey is not set");
         }
 
-        public async Task<List<Book>> GetFictionBooksAsync(int maxResults = 2)
+        public async Task<List<Book>> GetFictionBooksAsync(int maxResults = 15)
         {
             var books = new List<Book>();
             int startIndex = 0;
 
             while (books.Count < maxResults)
             {
-                string query = $"https://www.googleapis.com/books/v1/volumes?q=subject:fiction+intitle:book&printType=books&startIndex={startIndex}&maxResults=10&orderBy=relevance&key={_apiKey}";
+                string query = $"https://www.googleapis.com/books/v1/volumes?q=subject:poetry+intitle:book&printType=books&startIndex={startIndex}&maxResults=10&orderBy=relevance&key={_apiKey}";
                 var response = await _httpClient.GetAsync(query);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 var googleBooksResponse = JsonSerializer.Deserialize<GoogleBooksResponse>(jsonResponse, new JsonSerializerOptions

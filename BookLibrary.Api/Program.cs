@@ -25,6 +25,8 @@ builder.Services.AddScoped<BookRepository>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<LoginRepository>();
+builder.Services.AddHttpClient<GetMeetUpService>();
+
 try
 {
     using (var conn = new NpgsqlConnection(connString))
@@ -58,24 +60,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
-// builder.Services.AddAuthentication(options =>
-//     {
-//         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//     })
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuer = true,
-//             ValidateAudience = true,
-//             ValidateLifetime = true,
-//             ValidateIssuerSigningKey = true,
-//             ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//             ValidAudience = builder.Configuration["Jwt:Audience"],
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-//         };
-//     });
+
 var app = builder.Build();
 
 
