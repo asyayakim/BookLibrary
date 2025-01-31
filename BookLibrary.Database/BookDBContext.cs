@@ -14,4 +14,5 @@ public class BookDbContext : DbContext
     public virtual DbSet<LoanedBook> LoanedBook { get; set; }
    
     public virtual DbSet<FavoriteBooks> FavoriteBooks { get; set; }
+    public virtual DbSet<AllLoanedBooks> AllLoanedBooks { get; set; }
 }

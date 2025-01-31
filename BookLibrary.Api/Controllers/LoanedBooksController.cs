@@ -151,4 +151,23 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+    [HttpGet("mostLoaned")]
+    public async Task<IActionResult> GetMostLoanedBooks()
+    {
+        try
+        {
+            var mostLoanedBooks = await _bookService.GetMostLoanedBooksAsync();
+            if (mostLoanedBooks == null || !mostLoanedBooks.Any())
+            {
+                return NotFound(new { Message = "No loaned books found." });
+            }
+
+            return Ok(mostLoanedBooks);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching most loaned books: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
 }

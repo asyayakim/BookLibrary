@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Database
@@ -47,8 +46,18 @@ namespace BookLibrary.Database
 
         public async Task AddLoanedBookAsync(int userId, LoanedBook loanedBook)
         {
-            loanedBook.UserId = userId; 
-            _context.LoanedBook.Add(loanedBook); 
+            loanedBook.UserId = userId;
+            _context.LoanedBook.Add(loanedBook);
+            var allLoanedBook = new AllLoanedBooks
+            {
+                UserId = loanedBook.UserId,
+                Isbn = loanedBook.Isbn,
+                Title = loanedBook.Title,
+                LoanDate = loanedBook.LoanDate,
+                CoverImageUrl = loanedBook.CoverImageUrl
+            };
+
+            _context.AllLoanedBooks.Add(allLoanedBook);
             await _context.SaveChangesAsync();
         }
 
@@ -79,7 +88,24 @@ namespace BookLibrary.Database
         public async Task<IEnumerable<LoanedBook>> GetAllLoanedBooksByUserAsync()
         {
             return await _context.LoanedBook.ToListAsync();
-            
+        }
+
+        public async Task<IEnumerable<AllLoanedBooks>> GetMostLoanedBooksAsync()
+        {
+            return await _context.AllLoanedBooks
+                .GroupBy(l => new { l.Isbn, l.Title })
+                .OrderByDescending(g => g.Count())
+                .Select(g => new AllLoanedBooks
+                {
+                    Isbn = g.Key.Isbn,
+                    Title = g.Key.Title,
+                    Id = g.First().Id,
+                    LoanDate = g.Max(l => l.LoanDate),
+                    UserId = g.First().UserId,
+                    CoverImageUrl = g.First().CoverImageUrl
+                })
+                .Take(10) 
+                .ToListAsync().ConfigureAwait(false);
         }
     }
 }

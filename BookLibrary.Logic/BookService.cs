@@ -55,4 +55,9 @@ public class BookService
     {
         return await _bookRepository.GetAllLoanedBooksByUserAsync();
     }
+
+    public async Task<IEnumerable<AllLoanedBooks>> GetMostLoanedBooksAsync()
+    {
+        return await _bookRepository.GetMostLoanedBooksAsync();
+    }
 }
