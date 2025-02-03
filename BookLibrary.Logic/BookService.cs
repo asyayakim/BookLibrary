@@ -41,10 +41,17 @@ public class BookService
        return await _bookRepository.GetLoanedBooksByUserAsync(userId);
     }
 
-    public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks? favoriteBooks)
+    public async Task AddFavoriteBookAsync(int userId, FavoriteBooks favoriteBooks)
     {
-       await _bookRepository.AddFavoriteBookAsync(favoriteBooksUserId, favoriteBooks);
+        bool exists = await _bookRepository.IsBookAlreadyFavoritedAsync(userId, favoriteBooks.Isbn);
+        if (exists)
+        {
+            throw new InvalidOperationException("Book is already in favorites.");
+        }
+
+        await _bookRepository.AddFavoriteBookAsync(userId, favoriteBooks);
     }
+    
 
     public async Task RemoveLoanedBookAsync(LoanedBook loanedBook)
     {
@@ -64,5 +71,10 @@ public class BookService
     public async Task<IEnumerable<FavoriteBooks>> ShowFavoriteBookAsync(int userId)
     {
         return await _bookRepository.GetFavoriteBookAsync(userId);
+    }
+
+    public async Task RemoveFavoriteBookAsync(FavoriteBooks favBook)
+    {
+        await _bookRepository.RemoveFavoriteBooks(favBook);
     }
 }

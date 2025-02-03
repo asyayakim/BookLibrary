@@ -78,7 +78,7 @@ public class LoanedBooksController : ControllerBase
     }
 
     [HttpPost("favorite")]
-    public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks? favoriteBooks)
+    public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks favoriteBooks)
     {
         try
         {
@@ -86,14 +86,17 @@ public class LoanedBooksController : ControllerBase
             {
                 return BadRequest(new { Message = "User ID is missing or invalid." });
             }
-
             if (string.IsNullOrEmpty(favoriteBooks.Isbn) || string.IsNullOrEmpty(favoriteBooks.Title))
             {
                 return BadRequest(new { Message = "Missing required fields (ISBN or BookName)." });
             }
 
             await _bookService.AddFavoriteBookAsync(favoriteBooks.UserId, favoriteBooks);
-            return Ok(new { Message = "Book successfully loaned." });
+            return Ok(new { Message = "Book successfully added to favorite books." });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { Message = ex.Message }); 
         }
         catch (Exception ex)
         {
@@ -205,5 +208,24 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+    [HttpDelete("removeFavoriteBook")]
+    public async Task<IActionResult> RemoveFavoriteBook([FromQuery] int userId, [FromQuery] string isbn)
+    {
+        try
+        {
+            if (userId <= 0)
+            {
+                return BadRequest(new { Message = "User ID is missing or invalid." });
+            }
 
+            var favBook = new FavoriteBooks() { UserId = userId, Isbn = isbn };
+            await _bookService.RemoveFavoriteBookAsync(favBook);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error deleting book: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
 }

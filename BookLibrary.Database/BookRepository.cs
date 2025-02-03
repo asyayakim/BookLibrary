@@ -65,9 +65,18 @@ namespace BookLibrary.Database
         {
             return await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
         }
-
-        public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks? favoriteBooks)
+        public async Task<bool> IsBookAlreadyFavoritedAsync(int userId, string isbn)
         {
+            return await _context.FavoriteBooks
+                .AnyAsync(fb => fb.UserId == userId && fb.Isbn == isbn);
+        }
+        public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
+        {
+            bool bookExist = await IsBookAlreadyFavoritedAsync(favoriteBooksUserId, favoriteBooks.Isbn );
+            if (bookExist)
+            {
+                throw new InvalidOperationException("This book is already in the favorites list."); 
+            }
             favoriteBooks.UserId = favoriteBooksUserId;
             _context.FavoriteBooks.Add(favoriteBooks);
             await _context.SaveChangesAsync();
@@ -113,6 +122,16 @@ namespace BookLibrary.Database
             return await _context.FavoriteBooks
                 .Where(f => f.UserId == userId) 
                 .ToListAsync();
+        }
+
+        public async Task RemoveFavoriteBooks(FavoriteBooks favBook)
+        {
+            var book = await _context.FavoriteBooks.FirstOrDefaultAsync(b => b.Isbn == favBook.Isbn&& b.UserId == favBook.UserId);
+            if (book != null)
+            {
+                _context.FavoriteBooks.Remove(book);
+                await _context.SaveChangesAsync();
+            }                                                     
         }
     }
 }
