@@ -41,7 +41,7 @@ public class BookService
        return await _bookRepository.GetLoanedBooksByUserAsync(userId);
     }
 
-    public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
+    public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks? favoriteBooks)
     {
        await _bookRepository.AddFavoriteBookAsync(favoriteBooksUserId, favoriteBooks);
     }
@@ -59,5 +59,10 @@ public class BookService
     public async Task<IEnumerable<AllLoanedBooks>> GetMostLoanedBooksAsync()
     {
         return await _bookRepository.GetMostLoanedBooksAsync();
+    }
+
+    public async Task<IEnumerable<FavoriteBooks>> ShowFavoriteBookAsync(int userId)
+    {
+        return await _bookRepository.GetFavoriteBookAsync(userId);
     }
 }

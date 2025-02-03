@@ -66,7 +66,7 @@ namespace BookLibrary.Database
             return await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
         }
 
-        public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
+        public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks? favoriteBooks)
         {
             favoriteBooks.UserId = favoriteBooksUserId;
             _context.FavoriteBooks.Add(favoriteBooks);
@@ -106,6 +106,13 @@ namespace BookLibrary.Database
                 })
                 .Take(10) 
                 .ToListAsync().ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<FavoriteBooks>> GetFavoriteBookAsync(int userId)
+        {
+            return await _context.FavoriteBooks
+                .Where(f => f.UserId == userId) 
+                .ToListAsync();
         }
     }
 }

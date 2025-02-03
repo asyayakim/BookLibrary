@@ -78,7 +78,7 @@ public class LoanedBooksController : ControllerBase
     }
 
     [HttpPost("favorite")]
-    public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks favoriteBooks)
+    public async Task<IActionResult> AddFavoriteBook([FromBody] FavoriteBooks? favoriteBooks)
     {
         try
         {
@@ -151,6 +151,7 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+
     [HttpGet("mostLoaned")]
     public async Task<IActionResult> GetMostLoanedBooks()
     {
@@ -170,4 +171,39 @@ public class LoanedBooksController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+
+    [HttpGet("showFavorite")]
+    public async Task<IActionResult> PrintFavoriteBooks([FromQuery] int userId)
+
+    {
+        if (userId <= 0)
+        {
+            return BadRequest(new { Message = "Invalid user ID." });
+        }
+
+        try
+        {
+            var favoriteBooks = await _bookService.ShowFavoriteBookAsync(userId);
+            if (favoriteBooks == null || !favoriteBooks.Any()) 
+            {
+                return NotFound(new { Message = "No favorite books found for this user." });
+            }
+
+            var result = favoriteBooks.Select(book => new
+            {
+                CoverImageUrl = book.CoverImageUrl,
+                UserId = book.UserId,
+                Isbn = book.Isbn,
+                Title = book.Title,
+            });
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching favorite books: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
+
 }
