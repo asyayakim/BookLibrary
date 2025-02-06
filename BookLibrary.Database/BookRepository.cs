@@ -65,18 +65,21 @@ namespace BookLibrary.Database
         {
             return await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
         }
+
         public async Task<bool> IsBookAlreadyFavoritedAsync(int userId, string isbn)
         {
             return await _context.FavoriteBooks
                 .AnyAsync(fb => fb.UserId == userId && fb.Isbn == isbn);
         }
+
         public async Task AddFavoriteBookAsync(int favoriteBooksUserId, FavoriteBooks favoriteBooks)
         {
-            bool bookExist = await IsBookAlreadyFavoritedAsync(favoriteBooksUserId, favoriteBooks.Isbn );
+            bool bookExist = await IsBookAlreadyFavoritedAsync(favoriteBooksUserId, favoriteBooks.Isbn);
             if (bookExist)
             {
-                throw new InvalidOperationException("This book is already in the favorites list."); 
+                throw new InvalidOperationException("This book is already in the favorites list.");
             }
+
             favoriteBooks.UserId = favoriteBooksUserId;
             _context.FavoriteBooks.Add(favoriteBooks);
             await _context.SaveChangesAsync();
@@ -113,25 +116,44 @@ namespace BookLibrary.Database
                     UserId = g.First().UserId,
                     CoverImageUrl = g.First().CoverImageUrl
                 })
-                .Take(10) 
+                .Take(10)
                 .ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<FavoriteBooks>> GetFavoriteBookAsync(int userId)
         {
             return await _context.FavoriteBooks
-                .Where(f => f.UserId == userId) 
+                .Where(f => f.UserId == userId)
                 .ToListAsync();
         }
 
         public async Task RemoveFavoriteBooks(FavoriteBooks favBook)
         {
-            var book = await _context.FavoriteBooks.FirstOrDefaultAsync(b => b.Isbn == favBook.Isbn&& b.UserId == favBook.UserId);
+            var book = await _context.FavoriteBooks.FirstOrDefaultAsync(b =>
+                b.Isbn == favBook.Isbn && b.UserId == favBook.UserId);
             if (book != null)
             {
                 _context.FavoriteBooks.Remove(book);
                 await _context.SaveChangesAsync();
-            }                                                     
+            }
+        }
+
+        public async Task UpdateBook(int id, Book updatedBook)
+        {
+            var book = await _context.Book.FirstOrDefaultAsync(b => b.Id == id);
+            if (book == null)
+            {
+                throw new Exception("Book not found");
+            }
+
+            book.Title = updatedBook.Title;
+            book.Author = updatedBook.Author;
+            book.Genre = updatedBook.Genre;
+            book.Year = updatedBook.Year;
+            book.Isbn = updatedBook.Isbn;
+            book.CoverImageUrl = updatedBook.CoverImageUrl;
+            
+            await _context.SaveChangesAsync();
         }
     }
 }

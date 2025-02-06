@@ -81,8 +81,7 @@ namespace BookLibrary.Api.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
-
-        // Delete a book
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
@@ -94,6 +93,22 @@ namespace BookLibrary.Api.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Error deleting book: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
+        }
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateBook(int id, [FromBody] Book updatedBook)
+        {
+            if (updatedBook == null) return BadRequest("Request body is missing or invalid");
+
+            try
+            {
+                await _bookService.UpdateBookAsync(id, updatedBook);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating book: {ex.Message}");
                 return StatusCode(500, "Internal server error.");
             }
         }

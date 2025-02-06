@@ -77,4 +77,9 @@ public class BookService
     {
         await _bookRepository.RemoveFavoriteBooks(favBook);
     }
+    
+    public async Task UpdateBookAsync( int id,Book updatedBook)
+    {
+        await _bookRepository.UpdateBook( id, updatedBook);
+    }
 }
