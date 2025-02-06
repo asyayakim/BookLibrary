@@ -49,4 +49,9 @@ public class LoginService : ILoginService
         await _loginRepository.AddAsync(userData);
         return userData;
     }
+
+    public Task<List<UserData>> GetAllUsersDataAsync()
+    {
+        return _loginRepository.GetAllUserData();
+    }
 }

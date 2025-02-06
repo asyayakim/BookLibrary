@@ -28,8 +28,7 @@ public class LoginController : ControllerBase
                    return StatusCode(500, "Internal server error.");
                }
            }
-   
-           // GET: api/UserData
+
            [HttpGet("{id}")]
            public async Task<ActionResult<UserData>> GetUserData(int id)
            {
@@ -42,7 +41,7 @@ public class LoginController : ControllerBase
                return Ok(userData);
            }
    
-           // POST: api/UserData
+        
            [HttpPost]
            public async Task<ActionResult<UserData>> CreateUserData(UserData userData)
            {
@@ -58,7 +57,7 @@ public class LoginController : ControllerBase
                }
            }
    
-           // Delete a book
+      
            [HttpDelete("{id}")]
            public async Task<IActionResult> DeleteUserData(int id)
            {

@@ -11,4 +11,5 @@ public interface ILoginService
     Task DeleteUserDataAsync(int id);
     UserData GetUsersDataAsync(string requestUserName, string requestPassword);
     Task<UserData> AddUserDataAsync(string requestUserName, string requestPassword);
+    Task<List<UserData>> GetAllUsersDataAsync();
 }

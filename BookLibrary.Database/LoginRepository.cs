@@ -48,4 +48,9 @@ public class LoginRepository
         return _context.UserData.FirstOrDefault(b => b.UserName == requestUserName &&
                                                      b.Password == requestPassword)!;
     }
+
+    public Task<List<UserData>> GetAllUserData()
+    {
+        return _context.UserData.ToListAsync();
+    }
 }
