@@ -155,5 +155,19 @@ namespace BookLibrary.Database
             
             await _context.SaveChangesAsync();
         }
+
+        public async Task DeleteAllFavoriteUserBooks(int userId)
+        {
+            var userFavBooks = await _context.FavoriteBooks.Where(f => f.UserId == userId).ToListAsync();
+            _context.FavoriteBooks.RemoveRange(userFavBooks);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAllLoanedUserBooks(int userId)
+        {
+            var userLoanedBooks = await _context.LoanedBook.Where(l => l.UserId == userId).ToListAsync();
+            _context.LoanedBook.RemoveRange(userLoanedBooks);
+            await _context.SaveChangesAsync();
+        }
     }
 }

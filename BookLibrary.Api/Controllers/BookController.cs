@@ -81,7 +81,44 @@ namespace BookLibrary.Api.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
-        
+        [HttpDelete("deleteAllFavoriteBooks")]
+        public async Task<IActionResult> DeleteAllFavoriteBooks([FromQuery] int userId)
+        {
+            if (userId <= 0)
+            {
+                return BadRequest("Invalid user ID.");
+            }
+
+            try
+            {
+                await _bookService.DeleteAllFavoriteBooksAsync(userId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting book: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
+        } 
+        [HttpDelete("deleteAllLoanedBooks")]
+        public async Task<IActionResult> DeleteAllLoanedBooks([FromQuery] int userId)
+        {
+            if (userId <= 0)
+            {
+                return BadRequest("Invalid user ID.");
+            }
+
+            try
+            {
+                await _bookService.DeleteAllLoanedBooksAsync(userId);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting book: {ex.Message}");
+                return StatusCode(500, "Internal server error.");
+            }
+        } 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {

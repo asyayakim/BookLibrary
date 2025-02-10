@@ -3,7 +3,8 @@ using BookLibrary.Logic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Api.Controllers;
-
+[Route("api/[controller]")]
+[ApiController]
 public class AdminController : ControllerBase
 {
     private readonly ILoginService _loginService;

@@ -82,4 +82,14 @@ public class BookService
     {
         await _bookRepository.UpdateBook( id, updatedBook);
     }
+
+    public async Task DeleteAllFavoriteBooksAsync(int userId)
+    {
+        await _bookRepository.DeleteAllFavoriteUserBooks(userId);
+    }
+
+    public async Task DeleteAllLoanedBooksAsync(int userId)
+    {
+        await _bookRepository.DeleteAllLoanedUserBooks(userId);
+    }
 }
