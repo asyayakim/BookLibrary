@@ -53,4 +53,16 @@ public class LoginRepository
     {
         return _context.UserData.ToListAsync();
     }
+
+    public async Task ChangeUserData(string requestUserName, string requestPassword, int requestId)
+    {
+        var userData = _context.UserData.FirstOrDefault(b => b.Id == requestId);
+        if (userData != null)
+        {
+            userData.UserName = requestUserName;
+            userData.Password = requestPassword;
+            _context.Entry(userData).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+    }
 }

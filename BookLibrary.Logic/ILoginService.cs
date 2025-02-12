@@ -12,4 +12,7 @@ public interface ILoginService
     UserData GetUsersDataAsync(string requestUserName, string requestPassword);
     Task<UserData> AddUserDataAsync(string requestUserName, string requestPassword);
     Task<List<UserData>> GetAllUsersDataAsync();
+    Task ChangeUserDataAsync(string requestUserName, string requestPassword, int requestId);
+
+    Task<Task<UserData?>> GetUserDataAsync(int requestId);
 }

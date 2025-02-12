@@ -54,4 +54,14 @@ public class LoginService : ILoginService
     {
         return _loginRepository.GetAllUserData();
     }
+
+    public Task ChangeUserDataAsync(string requestUserName, string requestPassword, int requestId)
+    {
+        return _loginRepository.ChangeUserData(requestUserName, requestPassword, requestId);
+    }
+
+    public Task<Task<UserData?>> GetUserDataAsync(int requestId)
+    {
+        return Task.FromResult(_loginRepository.GetByIdAsync(requestId));
+    }
 }

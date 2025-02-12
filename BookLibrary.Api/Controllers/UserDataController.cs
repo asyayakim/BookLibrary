@@ -34,5 +34,29 @@ public class UserDataController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
+    [HttpPut("changeUserData")]
+    public async Task<IActionResult> ChangeUserData([FromBody] UserData request)
+    {
+        try
+        {
+            var existingUser = await _loginService.GetUserDataAsync(request.Id);
+            if (existingUser == null)
+            {
+                return BadRequest($"User with ID '{request.Id}' does not exist.");
+            }
+
+            await _loginService.ChangeUserDataAsync(request.UserName, request.Password, request.Id);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error during registration: {ex.Message}");
+            return StatusCode(500, "Internal server error.");
+        }
+    }
  
 }
