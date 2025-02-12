@@ -1,14 +1,22 @@
 📚 BookLibrary Backend
+
 This is the backend for the BookLibrary project, developed using ASP.NET Core with PostgreSQL as the database. It serves as the backbone of the library system, providing API endpoints for book management, user authentication, loans, and other functionalities.
 
 ✨ Features
 ✅ Manage Books – Add, update, delete, and retrieve book details.
+
 📊 Top 10 Loaned Books – Track and display the most borrowed books.
+
 🔍 Advanced Search – Find books by title, author, year, or genre.
+
 📚 Loan System – Allow users to borrow and return books.
+
 👤 User Management – Create, update, and delete user accounts.
+
 🔑 Authentication & Authorization – Secure user login and role-based access.
+
 🛠 Admin Controls – Manage books and users via an admin panel.
+
 📅 Library Events API – Store and retrieve upcoming events.
 
 🏗 Project Structure
