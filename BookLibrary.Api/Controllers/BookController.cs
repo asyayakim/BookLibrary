@@ -37,7 +37,7 @@ namespace BookLibrary.Api.Controllers
             }
         }
 
-        // GET: api/Customer
+  
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
         {
@@ -53,7 +53,7 @@ namespace BookLibrary.Api.Controllers
             }
         }
 
-        // GET: api/Customer/1
+  
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
