@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Api.Controllers;
+
 [ApiController]
 [Route("api/auth")]
 public class AuthController : ControllerBase
@@ -26,8 +27,10 @@ public class AuthController : ControllerBase
                 return Unauthorized("Invalid username, password.");
             }
 
+            var token = _loginService.GenerateJwtToken(request);
             return Ok(new
             {
+                Token = token,
                 User = new
                 {
                     Id = user.Id,
@@ -42,5 +45,4 @@ public class AuthController : ControllerBase
             return StatusCode(500, "Internal server error.");
         }
     }
-    
 }

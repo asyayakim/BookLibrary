@@ -38,15 +38,9 @@ public class UserDataController : ControllerBase
     public async Task<IActionResult> ChangeUserData([FromBody] UserData request)
     {
         try
-        {
-            var existingUser = await _loginService.GetUserDataAsync(request.Id);
-            if (existingUser == null)
-            {
-                return BadRequest($"User with ID '{request.Id}' does not exist.");
-            }
-
+        { 
             await _loginService.ChangeUserDataAsync(request.UserName, request.Password, request.Id);
-            return NoContent();
+            return Ok("User data updated successfully.");
         }
         catch (InvalidOperationException ex)
         {

@@ -1,0 +1,13 @@
+
+*.dll
+*.json
+*.info
+*.csproj
+*.pdb
+*.cache
+*.txt
+*.strings
+*.Up2Date
+*.pak
+*.Api
+*.props

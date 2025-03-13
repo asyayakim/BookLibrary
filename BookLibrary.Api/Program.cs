@@ -26,7 +26,23 @@ builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<LoginRepository>();
 builder.Services.AddHttpClient<GetMeetUpService>();
-
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "jobtracker-api",
+        ValidAudience = "jobtracker-client",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key"))
+    };
+});
 try
 {
     using (var conn = new NpgsqlConnection(connString))
@@ -54,7 +70,6 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        // policy.WithOrigins("http://localhost:63342")
        policy.WithOrigins("http://localhost:8080", "http://localhost:8080") 
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -73,7 +88,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
-// app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

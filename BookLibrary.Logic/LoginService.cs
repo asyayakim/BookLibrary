@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using BookLibrary.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BookLibrary.Logic;
 
@@ -63,5 +67,24 @@ public class LoginService : ILoginService
     public Task<Task<UserData?>> GetUserDataAsync(int requestId)
     {
         return Task.FromResult(_loginRepository.GetByIdAsync(requestId));
+    }
+
+    public string GenerateJwtToken(UserData user)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("A576E5A7234753777217A25432A462D4A614E645267556B5870327335763879"));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.UserName),
+        };
+        var token = new JwtSecurityToken(
+            issuer: "jobtracker-api",
+            audience: "obtracker-client",
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(30),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

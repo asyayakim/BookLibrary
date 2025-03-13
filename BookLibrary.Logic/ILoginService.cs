@@ -15,4 +15,5 @@ public interface ILoginService
     Task ChangeUserDataAsync(string requestUserName, string requestPassword, int requestId);
 
     Task<Task<UserData?>> GetUserDataAsync(int requestId);
+    string GenerateJwtToken(UserData request);
 }
